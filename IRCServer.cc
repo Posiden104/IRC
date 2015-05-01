@@ -79,22 +79,28 @@ IRCServer::initialize()
 }
 
 bool
-IRCServer::checkPassword(int fd, const char * username, const char * password) {
+IRCServer::checkPassword(int fd, const char * username, const char * password) 
+{
 	// Here check the password
-	void *data;
-	User *u;
-	//if(_users.find(username, &data)) {
-	//	u = (user*)data;
-//		if(strcmp(&(*u->password), password) == 0) {
-//			return true;
-//		}
-//	}
+	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
+		User u = *it;
+		if(!strcmp(u.username, username) && !strcmp(u.password, password)) {
+			return true;
+		}
+	}
 	return false;
 }  
 
 bool
 IRCServer::findUser(const char *username)
 {
+	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
+		User u = *it;
+		if(!strcmp(u.username, username)) {
+			return true;
+		}
+	}
+	return false;
 
 }
 

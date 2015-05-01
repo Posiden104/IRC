@@ -37,3 +37,13 @@
 [master 0a7eaf4] 0 of 62
  3 files changed, 7 insertions(+)
  create mode 100644 total.out
+[master 444b47a] Make IRCServer
+ 12 files changed, 1772 insertions(+), 303 deletions(-)
+ create mode 100644 '
+ create mode 100644 .IRCServer.cc.swp
+ create mode 100644 .IRCServer.h.swp
+ rewrite IRCServer (93%)
+ create mode 100644 IRCServerPortFunc.cc
+ create mode 100644 IRCServer_bkup.cc
+ create mode 100644 password.txt
+ create mode 100644 talk-server.out
