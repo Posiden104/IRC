@@ -52,3 +52,6 @@
 [master d044f90] Make IRCServer
  6 files changed, 10 insertions(+), 10 deletions(-)
  rewrite .IRCServer.cc.swp (71%)
+[master 9d0e7e6] Make IRCServer
+ 6 files changed, 13 insertions(+), 8 deletions(-)
+ rewrite IRCServer (70%)

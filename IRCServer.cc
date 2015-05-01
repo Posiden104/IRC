@@ -107,28 +107,30 @@ IRCServer::findUser(const char *username, User *ret)
 void
 IRCServer::addUser(int fd, const char * username, const char * password, const char * args)
 {
-	// Here add a new user. For now always return OK.
+	// Here add a new user.
+	User *u;
+	char *msg;
 	
-	void * blank;
-	const char *msg;
-	char *msg2 = (char*)calloc(100, sizeof(char));
-
-//	if(_users.find(username, &blank)) {
-		msg = strdup("ERROR (user already exists)\r\n");
-//	} else {
-		msg = strdup("OK\r\n");
+	// Find if the user exists already
+	
+	if(!findUser(username, u)){ 
+		char *filestr = (char*)calloc(100, sizeof(char));
 		newUser(username, password);
 		
 		FILE *psswrd;
 		psswrd = fopen(PASSWORD_FILE, "a");
-		strcat(msg2, username);
-		strcat(msg2, " ");
-		strcat(msg2, password);
-		strcat(msg2, "\r\n");
-		fprintf(psswrd, "%s",  msg2);
+		sprintf(filestr, "%s %s\r\n", username, password);
+		fprintf(psswrd, "%s", filestr);
 		fclose(psswrd);
-//	}
+		
+		free(filestr);
+		msg = strdup("OK\r\n");
+	} else {
+		msg = strdup("ERROR (user already exists)\r\n");
+	}
+
 	if(fd != -1) write(fd, msg, strlen(msg));
+	free(msg);
 	return;		
 }
 
