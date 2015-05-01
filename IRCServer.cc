@@ -82,26 +82,24 @@ bool
 IRCServer::checkPassword(int fd, const char * username, const char * password) 
 {
 	// Here check the password
-	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
-		User u = *it;
-		if(!strcmp(u.username, username) && !strcmp(u.password, password)) {
-			return true;
-		}
+	User *u = findUser(username);
+	if(u == NULL) return false;
+	if(!strcmp(u->username, username) && !strcmp(u->password, password)) {
+		return true;
 	}
 	return false;
 }  
 
-bool
+User *
 IRCServer::findUser(const char *username)
 {
 	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
 		User u = *it;
 		if(!strcmp(u.username, username)) {
-			return true;
+			return &u;
 		}
 	}
-	return false;
-
+	return NULL;
 }
 
 void
