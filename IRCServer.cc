@@ -101,6 +101,7 @@ IRCServer::checkPassword(int fd, const char * username, const char * password)
 	if(!strcmp(u->username, username) && !strcmp(u->password, password)) {
 		return true;
 	}
+	printf("user not found\n");
 	return false;
 }  
 
