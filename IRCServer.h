@@ -18,7 +18,6 @@ typedef struct Message {
 
 typedef struct Room {
 	char *name;
-//	SLList users;
 	std::list<User> *users;
 	std::list<Message> *messages;
 }Room;
@@ -29,14 +28,14 @@ private:
 	int open_server_socket(int port);
 	char *userWord;
 	char *passWord;
-	std::list<Message> mess;
-	std::list<User> users;
-	std::list<Room> rooms;
+	std::list<User> _users;
+	std::list<Room> _rooms;
 
 public:
+	void processRequest( int socket );
 	void initialize();
 	bool checkPassword(int fd, const char * user, const char * password);
-	void processRequest( int socket );
+	bool findUser(const char *user);
 	void addUser(int fd, const char * user, const char * password, const char * args);
 	void createRoom(int fd, const char * user, const char * password, const char * args);
 	void listRoom(int fd, const char * user, const char * password, const char * args);
