@@ -23,7 +23,6 @@ typedef struct Room {
 }Room;
 
 class IRCServer {
-	// Add any variables you need
 private:
 	int open_server_socket(int port);
 	char *userWord;
@@ -36,6 +35,7 @@ public:
 	void initialize();
 	bool checkPassword(int fd, const char * user, const char * password);
 	bool findUser(const char *user, User *ret);
+	bool findRoom(const char *room, Room *ret);
 	void addUser(int fd, const char * user, const char * password, const char * args);
 	void createRoom(int fd, const char * user, const char * password, const char * args);
 	void listRoom(int fd, const char * user, const char * password, const char * args);

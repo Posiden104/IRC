@@ -16,10 +16,18 @@
 
 using namespace std;
 
+/* Compare function to aid in the alphabetical sorting of users */
 bool
-compare(const char *a, const char*b) 
+compareUsers(User a, User b) 
 {
-	return strcmp(a, b) < 0;
+	return strcmp(a.username, b.username) < 0;
+}
+
+/* Compare function to aid in the alphebetical sorting of rooms */
+bool
+compareRooms(Room *a, Room *b)
+{
+	return strcmp(a->name, b->name) < 0;
 }
 
 void 
@@ -36,6 +44,7 @@ IRCServer::newUser(const char *uname, const char *pass) {
 		
 }
 
+/* Preforms the initial server startup functions (loading persistant users and passwords) */
 void
 IRCServer::initialize()
 {
@@ -45,7 +54,7 @@ IRCServer::initialize()
 	char *u = userWord;
 	char *p = passWord;
 
-	// Open password file <- saves username/password for each user (persistant)
+	// Loads the saved users and their passwords upon a server startup
 	FILE *fd;
 	fd = fopen(PASSWORD_FILE, "a+");
 	
@@ -74,29 +83,35 @@ IRCServer::initialize()
 	
 	free(userWord);
 	free(passWord);
-	addUser(-1, "admin", "123", "");
-	createRoom(-1, "admin", "123", "room1");
+	
+	// Create server generated users (ADMIN)
+	addUser(-1, "ADMIN", "123", "");
+
+	// Create server generated Rooms (r1)
+	createRoom(-1, "ADMIN", "123", "r1");
 }
 
+/* Authenticates the user's password */
 bool
 IRCServer::checkPassword(int fd, const char * username, const char * password) 
 {
-	// Here check the password
 	User *u;
 	if(!findUser(username, u)) return false;
-	if(u == NULL) return false;
+	if(u == NULL) return false;	// Extra protection
 	if(!strcmp(u->username, username) && !strcmp(u->password, password)) {
 		return true;
 	}
 	return false;
 }  
 
+/* Sets ret to the user with a name matching "username", otherwise ret = NULL */
 bool
 IRCServer::findUser(const char *username, User *ret)
 {
 	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
-		ret = &(*it);
-		if(!strcmp(ret->username, username)) {
+		ret = &(*it);				// Assigns the pointer of current user to ret
+
+		if(!strcmp(ret->username, username)) {	// Compares the current user's name to "username"
 			return true;
 		}
 	}
@@ -104,6 +119,21 @@ IRCServer::findUser(const char *username, User *ret)
 	return false;
 }
 
+/* Sets ret to the room with a name matching "room", otherwise ret = NULL */
+bool
+IRCServer::findRoom(const char *room, Room *ret) 
+{
+	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
+		ret = &(*it);				// Assigns the pointer of the current room to ret
+		if(!strcmp(ret->name, room)) {		// Compares the current room's name to "room"
+			return true;
+		}
+	}
+	ret = NULL;
+	return false;
+}
+
+/* Screens for existing users attempting to "create" instead of logging in */
 void
 IRCServer::addUser(int fd, const char * username, const char * password, const char * args)
 {
@@ -112,49 +142,55 @@ IRCServer::addUser(int fd, const char * username, const char * password, const c
 	char *msg;
 	
 	// Find if the user exists already
-	
 	if(!findUser(username, u)){ 
-		char *filestr = (char*)calloc(100, sizeof(char));
-		newUser(username, password);
 		
+		// Add new user
+		newUser(username, password);
 		FILE *psswrd;
+
+		// Record the username and password in PASSWORD_FILE
 		psswrd = fopen(PASSWORD_FILE, "a");
-		sprintf(filestr, "%s %s\r\n", username, password);
-		fprintf(psswrd, "%s", filestr);
+		fprintf(psswrd, "%s %s\r\n", username, password);
 		fclose(psswrd);
 		
-		free(filestr);
 		msg = strdup("OK\r\n");
 	} else {
 		msg = strdup("ERROR (user already exists)\r\n");
 	}
-
+	
+	// Check to see if user is server generated (ADMIN)
 	if(fd != -1) write(fd, msg, strlen(msg));
 	free(msg);
 	return;		
 }
 
+/* Construct a new room for users to join and chat */
 void
 IRCServer::createRoom(int fd, const char * username, const char * password, const char * args) 
 {
-	const char *msg = (char*)calloc(100, sizeof(char));
-	void *blank;
-/*	if(_rooms.find(args, &blank)) {
+	char *msg;
+	Room *room;
+	if(findRoom(args, room)) {
 		msg = strdup("DENIED (Room already exists)\r\n");
 		write(fd, msg, strlen(msg));
+		free(msg);
 		return;
 	} else {
-		roomptr = (Room*)malloc(sizeof(Room));
-		roomptr->name = strdup(args);
-		roomptr->messages = (new std::list<Message>());
-		mess.clear();
-		roomptr->users.head = NULL;
-		_rooms.insertItem(args, (void*)roomptr);
+		room = (Room*)malloc(sizeof(Room));
+		room->name = strdup(args);
+		room->messages = new std::list<Message>();
+		room->messages->clear();
+		room->users = new std::list<User>();
+		room->users->clear();
+		_rooms.push_front(*room);
+
 	}
 
 	msg = strdup("OK\r\n");
+	// Check to see if room is server generated (r1)
 	if(fd != -1) write(fd, msg, strlen(msg));
-*/	return;
+	free(msg);
+	return;
 }
 
 void
@@ -420,37 +456,40 @@ IRCServer::getUsersInRoom(int fd, const char * username, const char * password, 
 */	return;
 }
 
+/* Writes all users that have been created since the last username/password wipe to the socket in 1 string */
+// IDEA: add reset server/clean users & rooms command?
 void
 IRCServer::getAllUsers(int fd, const char * username, const char * password,const  char * args)
 {
-/*	HashTableVoidIterator HTI(&_users);
-	const char *key;
-	user *q = (user*)calloc(1, sizeof(user));
-	user u;
-	void *data;
 	char *msg = (char*)calloc(1000, sizeof(char));
-	vector<char*> userVector;
-	userVector.clear();
-	while(HTI.next(key, data)) {
-		q = (user*)data;
-		u = *q;
-		if(u.username == '\0') {
-			continue;
+	int len = 0;
+	int max = 1000;
+	User *u;
+	
+	// Sort the user list
+	_users.sort(compareUsers);
+
+	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
+		u = &(*it);
+		len += strlen(u->username) + 2;
+		
+		// Adjust size of msg
+		if(len >= max) {
+			msg = (char*)realloc(msg, (2 * len) * sizeof(char));
+			if(msg == NULL) {
+				write(fd, "Out of memory\r\n", 15);
+				exit(1);
+			}
+			max = 2 * len;
 		}
-		userVector.push_back(u.username);
+
+		// Add the current user's name to the msg string
+		strcat(msg, u->username);
+		strcat(msg, "\r\n");
 	}
-	std::sort(userVector.begin(), userVector.end(), compare);
-	char *response = (char*)calloc(100, sizeof(char));
-	for(vector<char*>::iterator it = userVector.begin(); it != userVector.end(); ++it) {
-		char* msg2 = *it;
-		if(msg2 == NULL) continue;
-		response = (char*)realloc(response, (strlen(response)+strlen(msg2)+2)*sizeof(char));
-		strcat(response,  msg2);
-		strcat(response, "\r\n");
-	}
-	response = (char*)realloc(response, (strlen(response)+2)*sizeof(char));
-	strcat(response, "\r\n");
-	write(fd, response, strlen(response) + 2);
-*/	return;
+
+	write(fd, msg, strlen(msg));
+	free(msg);
+	return;
 }
 
