@@ -111,10 +111,11 @@ IRCServer::checkPassword(int fd, const char * username, const char * password)
 bool
 IRCServer::findUser(const char *username, User *ret)
 {
+	User u;
 	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
-		ret = &(*it);				// Assigns the pointer of current user to ret
-
-		if(!strcmp(ret->username, username)) {	// Compares the current user's name to "username"
+		u = *it;				// Assigns the pointer of current user to ret
+		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
+			ret = &u;
 			return true;
 		}
 	}
@@ -126,9 +127,11 @@ IRCServer::findUser(const char *username, User *ret)
 bool
 IRCServer::findRoom(const char *room, Room *ret) 
 {
+	Room r;
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
-		ret = &(*it);				// Assigns the pointer of the current room to ret
-		if(!strcmp(ret->name, room)) {		// Compares the current room's name to "room"
+		r = *it;				// Assigns the pointer of the current room to ret
+		if(!strcmp(r.name, room)) {		// Compares the current room's name to "room"
+			ret = &r;
 			return true;
 		}
 	}
