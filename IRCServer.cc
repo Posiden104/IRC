@@ -384,7 +384,7 @@ IRCServer::checkPassword(int fd, const char * username, const char * password) {
 //		}
 //	}
 	return false;
-}
+}  
 
 void
 IRCServer::addUser(int fd, const char * username, const char * password, const char * args)
