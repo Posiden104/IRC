@@ -85,3 +85,7 @@
  rewrite .IRCServer.cc.swp (64%)
  rename IRCServer => .nfs000000000324610e0000011b (100%)
  rewrite IRCServer (75%)
+[master deb662b] Make IRCServer
+ 5 files changed, 5 insertions(+), 3 deletions(-)
+ rewrite .IRCServer.cc.swp (83%)
+ delete mode 100755 .nfs000000000324610e0000011b
