@@ -24,3 +24,7 @@
  create mode 100644 .local.total.out
  create mode 100644 total.out
  create mode 100644 total.txt
+[master ba9505c] Make IRCServer
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+ create mode 100755 IRCServer.org
+ delete mode 100644 total.out
