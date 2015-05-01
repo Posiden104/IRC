@@ -96,7 +96,7 @@ bool
 IRCServer::checkPassword(int fd, const char * username, const char * password) 
 {
 	User *u;
-	if(!findUser(username, u)) return false;
+	if(!findUser(username, &u)) return false;
 	printf("username is %s\n", u->username);
 	if(u == NULL) return false;	// Extra protection
 	printf("username: %d\n", strcmp(u->username, username));
@@ -109,13 +109,13 @@ IRCServer::checkPassword(int fd, const char * username, const char * password)
 
 /* Sets ret to the user with a name matching "username", otherwise ret = NULL */
 bool
-IRCServer::findUser(const char *username, User *ret)
+IRCServer::findUser(const char *username, User **ret)
 {
 	User u;
 	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
 		u = *it;				// Assigns the pointer of current user to ret
 		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			ret = &u;
+			*ret = &u;
 			return true;
 		}
 	}
@@ -125,13 +125,13 @@ IRCServer::findUser(const char *username, User *ret)
 
 /* Sets ret to the room with a name matching "room", otherwise ret = NULL */
 bool
-IRCServer::findRoom(const char *room, Room *ret) 
+IRCServer::findRoom(const char *room, Room **ret) 
 {
 	Room r;
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
 		r = *it;				// Assigns the pointer of the current room to ret
 		if(!strcmp(r.name, room)) {		// Compares the current room's name to "room"
-			ret = &r;
+			*ret = &r;
 			return true;
 		}
 	}
@@ -148,7 +148,7 @@ IRCServer::addUser(int fd, const char * username, const char * password, const c
 	char *msg;
 	
 	// Find if the user exists already
-	if(!findUser(username, u)){ 
+	if(!findUser(username, &u)){ 
 		
 		// Add new user
 		newUser(username, password);
@@ -176,7 +176,7 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 {
 	char *msg;
 	Room *room;
-	if(findRoom(args, room)) {
+	if(findRoom(args, &room)) {
 		msg = strdup("DENIED (Room already exists)\r\n");
 		write(fd, msg, strlen(msg));
 		free(msg);
