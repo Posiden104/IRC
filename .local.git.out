@@ -1,0 +1,19 @@
+[master (root-commit) 77d26ad] Make IRCServer
+ 17 files changed, 1522 insertions(+)
+ create mode 100644 .local.git.out
+ create mode 100755 IRCServer
+ create mode 100644 IRCServer.cc
+ create mode 100644 IRCServer.h
+ create mode 100755 Makefile
+ create mode 100755 TestIRCServer
+ create mode 100755 test-server1.sh
+ create mode 100755 test-server10.sh
+ create mode 100755 test-server2.sh
+ create mode 100755 test-server3.sh
+ create mode 100755 test-server4.sh
+ create mode 100755 test-server5.sh
+ create mode 100755 test-server6.sh
+ create mode 100755 test-server7.sh
+ create mode 100755 test-server8.sh
+ create mode 100755 test-server9.sh
+ create mode 100755 testall
