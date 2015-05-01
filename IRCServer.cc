@@ -491,5 +491,5 @@ IRCServer::getAllUsers(int fd, const char * username, const char * password,cons
 	write(fd, msg, strlen(msg));
 	free(msg);
 	return;
-}
+} 
 
