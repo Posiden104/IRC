@@ -19,3 +19,8 @@
  create mode 100755 testall
 [master 324c9d7] Make IRCServer
  1 file changed, 19 insertions(+)
+[master 4381c5e] 0 of 62
+ 4 files changed, 22 insertions(+)
+ create mode 100644 .local.total.out
+ create mode 100644 total.out
+ create mode 100644 total.txt
