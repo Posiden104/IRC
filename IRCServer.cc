@@ -97,7 +97,7 @@ IRCServer::checkPassword(int fd, const char * username, const char * password)
 {
 	User *u;
 	if(!findUser(username, u)) return false;
-	printf("user found\n");
+	printf("username is %s\n", u->username);
 	if(u == NULL) return false;	// Extra protection
 	printf("username: %d\n", strcmp(u->username, username));
 	printf("password: %d\n", strcmp(u->password, password));
