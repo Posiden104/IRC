@@ -25,9 +25,9 @@ compareUsers(User a, User b)
 
 /* Compare function to aid in the alphebetical sorting of rooms */
 bool
-compareRooms(Room *a, Room *b)
+compareRooms(Room a, Room b)
 {
-	return strcmp(a->name, b->name) < 0;
+	return strcmp(a.name, b.name) < 0;
 }
 
 void 
