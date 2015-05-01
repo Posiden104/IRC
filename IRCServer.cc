@@ -95,13 +95,13 @@ IRCServer::initialize()
 bool
 IRCServer::checkPassword(int fd, const char * username, const char * password) 
 {
+	printf("check user password\n");
 	User *u;
 	if(!findUser(username, u)) return false;
 	if(u == NULL) return false;	// Extra protection
 	if(!strcmp(u->username, username) && !strcmp(u->password, password)) {
 		return true;
 	}
-	printf("user not found\n");
 	return false;
 }  
 
