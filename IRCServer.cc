@@ -199,23 +199,15 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 void
 IRCServer::listRoom(int fd, const char * username, const char * password, const char * args)
 {
-/*	Room *roomptr;
-	HashTableVoidIterator HTI(&_rooms);
-	const char *key;
-	roomptr = (Room*)calloc(1, sizeof(Room));
-	void *data;
-	char *msg = (char*)calloc(1000, sizeof(char));
-	while(HTI.next(key, data)) {
-		roomptr = (Room*)data;
-		if(roomptr->name == '\0') {
-			continue;
-		}
-		msg = (char*)realloc(msg, (strlen(msg)+strlen(roomptr->name)+2)*sizeof(char));
-		strcat(msg, (roomptr->name));
-		strcat(msg, "\r\n");
+	Room *roomptr;
+	char *msg = (char*)calloc(100, sizeof(char));
+	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
+		roomptr = &(*it);
 	}
+
 	write(fd, msg, strlen(msg));
-*/	return;
+	free(msg);
+	return;
 
 }
 
