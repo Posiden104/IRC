@@ -236,18 +236,18 @@ void
 IRCServer::enterRoom(int fd, const char * username, const char * password, const char * args)
 {
 	char *msg;
-	Room *rm;
-	User *usr;
+	Room *rm = (Room*)calloc(1, sizeof(Room));
+	User *usr = (User*)calloc(1, sizeof(User));
 
 	// See if the room exists
 	if(findRoom(args, &rm)) {
 
 		// See if the user is already in the room
 		if(!findUser(username, &usr, rm->users)) {	
-			User *u = (User*)calloc(1, sizeof(User));
-			u->username = strdup(username);
-			u->password = strdup(password);
-			rm->users->push_front(*u);
+			//User *u = (User*)calloc(1, sizeof(User));
+			//u->username = strdup(username);
+			//u->password = strdup(password);
+			rm->users->push_front(*usr);
 			//rm->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
