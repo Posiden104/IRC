@@ -109,11 +109,13 @@ bool
 IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 {
 	User u;
+	*ret = (User*)calloc(1, sizeof(User));
+
 	if(_list->empty()) printf("empty\n");
 	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
 		u = *it;				// Assigns the pointer of current user to ret
 		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			*ret = &u;
+			*ret[0] = u;
 			return true;
 		}
 	}
