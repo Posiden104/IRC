@@ -133,3 +133,8 @@
 [master e6e774c] Make IRCServer
  5 files changed, 9 insertions(+), 3 deletions(-)
  rename .nfs000000000324a26700000529 => .nfs000000000324a8460000052a (66%)
+[master 7800888] Make IRCServer
+ 6 files changed, 7 insertions(+), 4 deletions(-)
+ rename IRCServer => .nfs000000000324a26a0000052b (100%)
+ delete mode 100755 .nfs000000000324a8460000052a
+ rewrite IRCServer (61%)
