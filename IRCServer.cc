@@ -147,10 +147,11 @@ bool
 IRCServer::findRoom(const char *room, Room **ret) 
 {
 	Room r;
+	*ret = (Room*)malloc(1* sizeof(Room));
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
 		r = *it;				// Assigns the pointer of the current room to ret
 		if(!strcmp(r.name, room)) {		// Compares the current room's name to "room"
-			*ret = &r;
+			*ret[0] = r;
 			return true;
 		}
 	}
@@ -265,9 +266,8 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 
 	// See if the room exists
 	if(findRoom(args, &tr)) {
-		memcpy(rm, tr, sizeof(Room));
 		// See if the user is already in the room
-		if(!findUser(username, &tu, rm->users)) {	
+		if(!findUser(username, &tu, tr->users)) {	
 			//u = grabUser(username, rm->users);
 			rm->users->push_front(*tu);
 			//rm->users->sort(compareUsers);
