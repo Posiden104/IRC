@@ -96,7 +96,7 @@ bool
 IRCServer::checkPassword(int fd, const char * username, const char * password) 
 {
 	User *u;
-	if(!findUser(username, &u)) return false;
+	if(!findUser(username, &u, &_users)) return false;
 	if(u == NULL) return false;	// Extra protection
 	if(!strcmp(u->username, username) && !strcmp(u->password, password)) {
 		return true;
@@ -106,10 +106,10 @@ IRCServer::checkPassword(int fd, const char * username, const char * password)
 
 /* Sets ret to the user with a name matching "username", otherwise ret = NULL */
 bool
-IRCServer::findUser(const char *username, User **ret)
+IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 {
 	User u;
-	for(std::list<User>::iterator it = _users.begin(); it != _users.end(); ++it) {
+	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
 		u = *it;				// Assigns the pointer of current user to ret
 		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
 			*ret = &u;
@@ -145,7 +145,7 @@ IRCServer::addUser(int fd, const char * username, const char * password, const c
 	char *msg;
 	
 	// Find if the user exists already
-	if(!findUser(username, &u)){ 
+	if(!findUser(username, &u, &_users)){ 
 		
 		// Add new user
 		newUser(username, password);
@@ -186,7 +186,8 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 		room->users = new std::list<User>();
 		room->users->clear();
 		_rooms.push_front(*room);
-
+		// Sort the rooms alphabetically
+		_rooms.sort(compareRooms);
 	}
 
 	msg = strdup("OK\r\n");
@@ -196,6 +197,7 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 	return;
 }
 
+/* Puts the names of all rooms into one char * and writes it to the socket */
 void
 IRCServer::listRoom(int fd, const char * username, const char * password, const char * args)
 {
@@ -203,9 +205,14 @@ IRCServer::listRoom(int fd, const char * username, const char * password, const 
 	char *msg = (char*)calloc(100, sizeof(char));
 	int len = 0;
 	int max = 100;
+
+	// Sort the rooms alphabetically
+	_rooms.sort(compareRooms);
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
 		roomptr = &(*it);
 		len += strlen(roomptr->name);
+		
+		// Resize the char * if needed
 		if(len >= max) {
 			msg = (char*)realloc(msg, (2*max)*sizeof(char));
 			max *= 2;
@@ -224,20 +231,20 @@ IRCServer::listRoom(int fd, const char * username, const char * password, const 
 
 }
 
+/* Puts the user into the room to send and recieve messages */
 void
 IRCServer::enterRoom(int fd, const char * username, const char * password, const char * args)
 {
-/*	const char *msg;
-	void *data;
-	Room *r;
-	user *u;
-	if(_rooms.find(args, &data)) {
-		r = (Room*)data;
-		if(_users.find(username, &data)) {
-			u = (user*)data;	
-			if(!sllist_contains(&(r->users), &(*u->username))) {
-				sllist_add_end(&(r->users), (u->username));
-			}
+	char *msg;
+	Room *rm;
+	User *usr;
+
+	// See if the room exists
+	if(findRoom(args, &rm)) {
+
+		// See if the user is already in the room
+		if(findUser(username, &usr, rm->users)) {	
+			
 			msg = strdup("OK\r\n");			
 		} else {
 			msg = strdup("ERROR (user not found)\r\n");
@@ -247,7 +254,7 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 	}
 
 	write(fd, msg, strlen(msg));
-*/	return;
+	return;
 }
 
 void
