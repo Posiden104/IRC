@@ -115,3 +115,7 @@
  5 files changed, 12 insertions(+), 7 deletions(-)
  rename IRCServer => .nfs000000000324a84400000525 (100%)
  rename .nfs000000000324a26700000524 => IRCServer (59%)
+[master 625b03c] Make IRCServer
+ 6 files changed, 6 insertions(+), 2 deletions(-)
+ create mode 100755 .nfs000000000324a26700000526
+ delete mode 100755 .nfs000000000324a84400000525

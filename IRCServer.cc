@@ -247,11 +247,11 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 			findUser(username, &usr, &_users);
 			//char *puname = strdup(usr->username);
 			//char *ppass = strdup(usr->password);
-			//User *u = (User*)calloc(1, sizeof(User));
+			User *u = (User*)calloc(1, sizeof(User));
 			//u = usr;
-			//u->username = strdup(usr->username);
-			//u->password = strdup(usr->password);
-			rm->users->push_front(*usr);
+			u->username = strdup(username);
+			u->password = strdup(password);
+			rm->users->push_front(*u);
 			rm->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
