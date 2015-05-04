@@ -243,17 +243,20 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 	if(findRoom(args, &rm)) {
 
 		// See if the user is already in the room
-		if(findUser(username, &usr, rm->users)) {	
-			
+		if(!findUser(username, &usr, rm->users)) {	
+			findUser(username, &usr, &_users);
+			rm->users->push_front(*usr);
+			rm->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
-			msg = strdup("ERROR (user not found)\r\n");
+			msg = strdup("ERROR (user already in room)\r\n");
 		}
 	} else {
 		msg = strdup("ERROR (No room)\r\n");
 	}
-
+	
 	write(fd, msg, strlen(msg));
+	free(msg);
 	return;
 }
 
