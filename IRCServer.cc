@@ -112,7 +112,7 @@ IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
 		u = *it;				// Assigns the pointer of current user to ret
 		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			*ret = &u;
+			memcpy(*ret, &u, sizeof(User));
 			return true;
 		}
 	}
