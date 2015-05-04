@@ -201,8 +201,21 @@ IRCServer::listRoom(int fd, const char * username, const char * password, const 
 {
 	Room *roomptr;
 	char *msg = (char*)calloc(100, sizeof(char));
+	int len = 0;
+	int max = 100;
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
 		roomptr = &(*it);
+		len += strlen(roomptr->name);
+		if(len >= max) {
+			msg = (char*)realloc(msg, (2*max)*sizeof(char));
+			max *= 2;
+		}
+		if(msg == NULL) {
+			write(fd, "Out of memory\r\n", 15);
+			exit(1);
+		}
+		strcat(msg, roomptr->name);
+		strcat(msg, "\r\n");
 	}
 
 	write(fd, msg, strlen(msg));
