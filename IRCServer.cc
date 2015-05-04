@@ -112,7 +112,7 @@ IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
 		u = *it;				// Assigns the pointer of current user to ret
 		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			memcpy(*ret, &u, sizeof(User));
+			*ret = &u;
 			return true;
 		}
 	}
@@ -128,7 +128,7 @@ IRCServer::findRoom(const char *room, Room **ret)
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
 		r = *it;				// Assigns the pointer of the current room to ret
 		if(!strcmp(r.name, room)) {		// Compares the current room's name to "room"
-			memcpy(*ret, &r, sizeof(Room));
+			*ret = &r;
 			return true;
 		}
 	}
