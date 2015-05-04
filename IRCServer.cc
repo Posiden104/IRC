@@ -112,7 +112,7 @@ IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
 		u = *it;				// Assigns the pointer of current user to ret
 		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			*ret = &u;
+			memcpy(*ret, &u, sizeof(User));
 			return true;
 		}
 	}
@@ -128,7 +128,7 @@ IRCServer::findRoom(const char *room, Room **ret)
 	for(std::list<Room>::iterator it = _rooms.begin(); it != _rooms.end(); ++it) {
 		r = *it;				// Assigns the pointer of the current room to ret
 		if(!strcmp(r.name, room)) {		// Compares the current room's name to "room"
-			*ret = &r;
+			memcpy(*ret, &r, sizeof(Room));
 			return true;
 		}
 	}
@@ -245,13 +245,13 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 		// See if the user is already in the room
 		if(!findUser(username, &usr, rm->users)) {	
 			findUser(username, &usr, &_users);
-			char *puname = strdup(usr->username);
-			char *ppass = strdup(usr->password);
-			User *u = (User*)calloc(1, sizeof(User));
-			u = usr;
+			//char *puname = strdup(usr->username);
+			//char *ppass = strdup(usr->password);
+			//User *u = (User*)calloc(1, sizeof(User));
+			//u = usr;
 			//u->username = strdup(usr->username);
 			//u->password = strdup(usr->password);
-			rm->users->push_front(*u);
+			rm->users->push_front(*usr);
 			rm->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
