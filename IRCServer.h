@@ -35,7 +35,6 @@ public:
 	void initialize();
 	bool checkPassword(int fd, const char * user, const char * password);
 	bool findUser(const char *user, User **ret, std::list<User> *_list);
-	User *grabUser(const char *user, std::list<User> *_list);
 	bool findRoom(const char *room, Room **ret);
 	void addUser(int fd, const char * user, const char * password, const char * args);
 	void createRoom(int fd, const char * user, const char * password, const char * args);

@@ -111,35 +111,18 @@ IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 	User u;
 	*ret = (User*)calloc(1, sizeof(User));
 
-	if(_list->empty()) printf("empty\n");
-	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
-		u = *it;				// Assigns the pointer of current user to ret
-		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			*ret[0] = u;
-			return true;
+	if(!_list->empty()){
+		for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
+			u = *it;				// Assigns the pointer of current user to ret
+			if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
+				*ret[0] = u;
+				return true;
+			}
 		}
 	}
+	free(*ret);
 	ret = NULL;
 	return false;
-}
-
-/* Returns a pointer to the user with a matching username */
-User *
-IRCServer::grabUser(const char *username, std::list<User> *_list)
-{
-	User u;
-	User *ret = (User*)calloc(1, sizeof(User));
-	for(std::list<User>::iterator it = _list->begin(); it != _list->end(); ++it) {
-		u = *it;				// Assigns the pointer of current user to ret
-		if(!strcmp(u.username, username)) {	// Compares the current user's name to "username"
-			ret->username = strdup(u.username);
-			ret->password = strdup(u.password);
-			return ret;
-		}
-	}
-	ret = NULL;
-	return ret;
-
 }
 
 /* Sets ret to the room with a name matching "room", otherwise ret = NULL */
@@ -155,6 +138,7 @@ IRCServer::findRoom(const char *room, Room **ret)
 			return true;
 		}
 	}
+	free(*ret);
 	ret = NULL;
 	return false;
 }
@@ -259,17 +243,14 @@ void
 IRCServer::enterRoom(int fd, const char * username, const char * password, const char * args)
 {
 	char *msg;
-	Room *rm; // = (Room*)calloc(1, sizeof(Room));
 	Room *tr;
 	User *tu;
-	User *u; // = (User*)calloc(1, sizeof(User));
 
 	// See if the room exists
 	if(findRoom(args, &tr)) {
 		// See if the user is already in the room
 		if(!findUser(username, &tu, tr->users)) {	
-			//u = grabUser(username, rm->users);
-			rm->users->push_front(*tu);
+			tr->users->push_front(*tu);
 			//rm->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
