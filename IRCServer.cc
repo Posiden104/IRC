@@ -246,9 +246,10 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 		if(!findUser(username, &usr, rm->users)) {	
 			findUser(username, &usr, &_users);
 			User *u = (User*)calloc(1, sizeof(User));
-			u->username = strdup(usr->username);
-			u->password = strdup(usr->password);
-			rm->users->push_front(*usr);
+			u = usr;
+			//u->username = strdup(usr->username);
+			//u->password = strdup(usr->password);
+			rm->users->push_front(*u);
 			rm->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
