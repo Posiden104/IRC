@@ -188,7 +188,7 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 		free(room);
 		return;
 	} else {
-		free(room);
+		//free(room);
 		room = (Room*)malloc(sizeof(Room));
 		room->name = strdup(args);
 		room->messages = new std::list<Message>();
