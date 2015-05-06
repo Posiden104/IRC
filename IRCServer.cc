@@ -153,7 +153,7 @@ IRCServer::addUser(int fd, const char * username, const char * password, const c
 	
 	// Find if the user exists already
 	if(!findUser(username, &u, &_users)){ 
-		
+		free(u);
 		// Add new user
 		newUser(username, password);
 		FILE *psswrd;
@@ -165,6 +165,7 @@ IRCServer::addUser(int fd, const char * username, const char * password, const c
 		
 		msg = strdup("OK\r\n");
 	} else {
+		free(u);
 		msg = strdup("ERROR (user already exists)\r\n");
 	}
 	
@@ -184,8 +185,10 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 		msg = strdup("DENIED (Room already exists)\r\n");
 		write(fd, msg, strlen(msg));
 		free(msg);
+		free(room);
 		return;
 	} else {
+		free(room);
 		room = (Room*)malloc(sizeof(Room));
 		room->name = strdup(args);
 		room->messages = new std::list<Message>();
@@ -251,15 +254,16 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 		// See if the user is already in the room
 		if(!findUser(username, &tu, tr->users)) {	
 			tr->users->push_front(*tu);
-			//rm->users->sort(compareUsers);
+			tr->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			
 		} else {
+			free(tu);
 			msg = strdup("ERROR (user already in room)\r\n");
 		}
 	} else {
 		msg = strdup("ERROR (No room)\r\n");
 	}
-	
+	free(tr);
 	write(fd, msg, strlen(msg));
 	free(msg);
 	return;
