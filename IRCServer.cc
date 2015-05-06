@@ -120,7 +120,6 @@ IRCServer::findUser(const char *username, User **ret, std::list<User> *_list)
 			}
 		}
 	}
-	free(*ret);
 	ret = NULL;
 	return false;
 }
@@ -138,7 +137,6 @@ IRCServer::findRoom(const char *room, Room **ret)
 			return true;
 		}
 	}
-	free(*ret);
 	ret = NULL;
 	return false;
 }
@@ -188,7 +186,7 @@ IRCServer::createRoom(int fd, const char * username, const char * password, cons
 		free(room);
 		return;
 	} else {
-		//free(room);
+		free(room);
 		room = (Room*)malloc(sizeof(Room));
 		room->name = strdup(args);
 		room->messages = new std::list<Message>();
