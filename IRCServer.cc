@@ -250,7 +250,7 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 	// See if the room exists
 	if(findRoom(args, &tr)) {
 		// See if the user is already in the room
-		if(!findUser(username, &tu, tr->users)) {	
+		if(!findUser(username, &tu, tr->users) && findUser(username, &tu, &_users)) {	
 			tr->users->push_front(*tu);
 			tr->users->sort(compareUsers);
 			msg = strdup("OK\r\n");			

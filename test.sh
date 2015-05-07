@@ -17,9 +17,9 @@ kill -9 $PID 2> /dev/null
 sleep 2
 
 #Start server in the background
-rm -f password.txt
-$SERVER $PORT > talk-server.out &
-sleep 1
+#rm -f password.txt
+#$SERVER $PORT > talk-server.out &
+#sleep 1
 
 echo Add Users
 ./TestIRCServer localhost $PORT "ADD-USER user1 123"
