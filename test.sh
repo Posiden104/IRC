@@ -36,7 +36,7 @@ echo Create Room
 ./TestIRCServer localhost $PORT "CREATE-ROOM user1 123 room2"
 
 echo List Rooms
-./TestIRCServer localhost $PORT "LIST-ROOMS user1"
+./TestIRCServer localhost $PORT "LIST-ROOMS user1 123"
 
 echo Enter Room
 ./TestIRCServer localhost $PORT "ENTER-ROOM user1 123 room1"
