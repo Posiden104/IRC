@@ -50,7 +50,8 @@ echo Enter Room
 
 
 # Kill server
-#echo Killing Server
+echo Killing Server
+./TestIRCServer localhost $PORT "SHUTDOWN admin 123"
 #PID=`ps | grep IRCServer | awk '{ print $1;}'`
 #kill -9 $PID
 
