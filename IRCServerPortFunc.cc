@@ -255,6 +255,11 @@ IRCServer::processRequest( int fd )
 			msg = strdup("Login successful\r\n");
 			write(fd, msg, strlen(msg));
 		}
+		else if(!strcmp(command, "SHUTDOWN")) {
+			msg = strdup("Shutting down\r\n");
+			running = false;
+			write(fd, msg, strlen(msg));
+		}
 		else {
 			msg =  "UNKNOWN COMMAND\r\n";
 			write(fd, msg, strlen(msg));
