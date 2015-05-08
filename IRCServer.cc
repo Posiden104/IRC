@@ -270,29 +270,40 @@ IRCServer::enterRoom(int fd, const char * username, const char * password, const
 void
 IRCServer::leaveRoom(int fd, const char * username, const char * password, const char * args)
 {
-/*	const char *msg;
-	void *data;
-	Room r;
-	user *u;
-	if(_rooms.find(args, &data)){
-		r = *((Room*)data);
-		if(_users.find(username, &data)){
-			u = (user*)data;
-			if(sllist_contains(&(r.users), &(*u->username))) {
-				sllist_remove(&(r.users), &(*u->username));
-				msg = strdup("OK\r\n");
-			} else {
-				msg = strdup("ERROR (No user in room)\r\n");
+	char *msg;
+	Room *r;
+	User *u;
+	
+	// See if the room exists
+	if(findRoom(args, &r)){
+		// See if the user is in the room
+		if(findUser(username, &u, r->users)){
+			// Create iterator to check each element
+			std::list<User>::iterator it = r->users->begin();
+			while(it != r->users->end()) {
+				u = &(*it);
+				if(strcmp(u->username, username) != 0) {
+					++it;
+				} else {
+					r->users->erase(it);
+					msg = strdup("OK\r\n");
+					break;
+				}
+				msg = NULL;
 			}
+			if(msg == NULL) msg = strdup("ERROR (finding user error)\r\n");
 		} else {
-			msg = strdup("ERROR (user not found)\r\n");
+			msg = strdup("ERROR (No user in room)\r\n");
 		}
 	} else {
 		msg = strdup("ERROR (No room)\r\n");
 	}
 
 	write(fd, msg, strlen(msg));
-*/ return;
+	free(r);
+	free(u);
+	free(msg);
+ 	return;
 }
 
 void

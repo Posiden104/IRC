@@ -17,7 +17,7 @@ kill -9 $PID 2> /dev/null
 sleep 2
 
 #Start server in the background
-#rm -f password.txt
+rm -f password.txt
 #$SERVER $PORT > talk-server.out &
 #sleep 1
 
@@ -44,13 +44,13 @@ echo Enter Room
 ./TestIRCServer localhost $PORT "ENTER-ROOM user3 123 room1"
 ./TestIRCServer localhost $PORT "ENTER-ROOM user1 123 room2"
 ./TestIRCServer localhsot $PORT "ENTER-ROOM mary poppins room2"
-./TestIRCServer localhost $PORT "ENTER-ROOM ADMIN 123 room3"
-./TestIRCServer localhsot $PORT "ENTER-ROOM mary poppins room3"
+./TestIRCServer localhost $PORT "ENTER-ROOM ADMIN 123 r1"
+./TestIRCServer localhsot $PORT "ENTER-ROOM mary poppins r1"
 
 
 
 # Kill server
-echo Killing Server
-PID=`ps | grep IRCServer | awk '{ print $1;}'`
-kill -9 $PID
+#echo Killing Server
+#PID=`ps | grep IRCServer | awk '{ print $1;}'`
+#kill -9 $PID
 
