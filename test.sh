@@ -47,11 +47,16 @@ echo Enter Room
 ./TestIRCServer localhost $PORT "ENTER-ROOM ADMIN 123 r1"
 ./TestIRCServer localhsot $PORT "ENTER-ROOM mary poppins r1"
 
-
+echo Leave Room
+./TestIRCServer localhost $PORT "LEAVE-ROOM user1 123 room2"
+./TestIRCServer localhost $PORT "LEAVE-ROOM mary poppins room2"
+./TestIRCServer localhost $PORT "LEAVE-ROOM ADMIN 123 room1"
+./TestIRCServer localhsot $PORT "LEAVE-ROOM ADMIN 123 room2"
 
 # Kill server
 echo Killing Server
-./TestIRCServer localhost $PORT "SHUTDOWN admin 123"
+./TestIRCServer localhost $PORT "SHUTDOWN ADMIN 123"
+rm -f password.txt
 #PID=`ps | grep IRCServer | awk '{ print $1;}'`
 #kill -9 $PID
 
