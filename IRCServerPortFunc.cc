@@ -85,9 +85,11 @@ IRCServer::runServer(int port)
 {
 	int masterSocket = open_server_socket(port);
 	
+	running = true;
+
 	initialize();
-	
-	while ( 1 ) {
+
+	while ( running ) {
 		
 		// Accept incoming connections
 		struct sockaddr_in clientIPAddress;

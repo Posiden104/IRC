@@ -29,6 +29,7 @@ private:
 	char *passWord;
 	std::list<User> _users;
 	std::list<Room> _rooms;
+	bool running;
 
 public:
 	void processRequest( int socket );
