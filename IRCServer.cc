@@ -300,8 +300,8 @@ IRCServer::leaveRoom(int fd, const char * username, const char * password, const
 	}
 
 	write(fd, msg, strlen(msg));
-	//free(r);
-	free(u);
+	free(r);
+	//free(u);
 	free(msg);
  	return;
 }
