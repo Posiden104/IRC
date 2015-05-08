@@ -301,7 +301,6 @@ IRCServer::leaveRoom(int fd, const char * username, const char * password, const
 
 	write(fd, msg, strlen(msg));
 	free(r);
-	//free(u);
 	free(msg);
  	return;
 }
@@ -447,49 +446,42 @@ IRCServer::getMessages(int fd, const char * username, const char * password, con
 void
 IRCServer::getUsersInRoom(int fd, const char * username, const char * password, const char * args)
 {
-/*	char *msg;
-	void *data;
-	user *u;
-	Room *roomptr;
-	if(_rooms.find(args, &data)) {
-		roomptr = (Room*)data;
-		msg = strdup(sllist_returnNames(&(roomptr->users)));
-	} else {
-		msg = strdup("ERROR (No Room)\r\n");
-		write(fd, msg, strlen(msg));
+	char *msg = (char*)calloc(1000, sizeof(char));
+	int len = 0;
+	int max = 1000;
+	User *u;
+	Room *r;
+
+	if(!findRoom(args, &r)) {
+		free(r);
+		msg = strdup("Room not found\r\n");
 		return;
 	}
-	char *p = msg;
-	char *uName = (char*)calloc(100, sizeof(char));
-	char *q = uName;
-	std::vector<char*> userVector;
-	userVector.clear();
-	while(*p != '\0') {
-		if(*p == '\n') {
-			*q = *p;
-			p++;
-			userVector.push_back(uName);
-			uName = (char*)calloc(100, sizeof(char));
-			q = uName;
-		} else {
-			*q = *p;
-			q++;
-			p++;
+	// Sort the user list
+	r->users->sort(compareUsers);
+
+	for(std::list<User>::iterator it = r->users->begin(); it != r->users->end(); ++it) {
+		u = &(*it);
+		len += strlen(u->username) + 2;
+		
+		// Adjust size of msg
+		if(len >= max) {
+			msg = (char*)realloc(msg, (2 * len) * sizeof(char));
+			if(msg == NULL) {
+				write(fd, "Out of memory\r\n", 15);
+				exit(1);
+			}
+			max = 2 * len;
 		}
+
+		// Add the current user's name to the msg string
+		strcat(msg, u->username);
+		strcat(msg, "\r\n");
 	}
-	std::sort(userVector.begin(), userVector.end(), compare);
-	char *response = (char*)calloc(100, sizeof(char));
-	for(vector<char*>::iterator it = userVector.begin(); it != userVector.end(); ++it) {
-		char* ret = *it;
-		if(ret == '\0') continue;
-		response = (char*)realloc(response, (strlen(response)+strlen(ret)+2)*sizeof(char));
-		strcat(response, ret);
-		strcat(response, "\r\n");
-	}
-	response = (char*)realloc(response, (strlen(response)+2)*sizeof(char));
-	strcat(response, "\r\n");
-	write(fd, response, strlen(response+2));
-*/	return;
+
+	write(fd, msg, strlen(msg));
+	free(msg);
+	return;
 }
 
 /* Writes all users that have been created since the last username/password wipe to the socket in 1 string */
