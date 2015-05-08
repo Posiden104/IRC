@@ -188,3 +188,8 @@
 [master 9f45261] Make IRCServer
  6 files changed, 7 insertions(+), 4 deletions(-)
  create mode 100755 .nfs0000000003245620000000cd
+[master b82f4ad] Make IRCServer
+ 7 files changed, 35 insertions(+), 26 deletions(-)
+ delete mode 100755 .nfs0000000003245620000000cd
+ rewrite IRCServer (86%)
+ delete mode 100644 password.txt
