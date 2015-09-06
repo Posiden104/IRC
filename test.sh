@@ -48,13 +48,15 @@ echo Enter Room
 ./TestIRCServer localhsot $PORT "ENTER-ROOM mary poppins r1"
 
 echo Print Users in rooms
- 
+./TestIRCServer localhost $PORT "GET-USERS-IN-ROOM user1 123 room1"
+./TestIRCServer localhost $PORT "GET-USERS-IN-ROOM user1 123 room2"
+./TestIRCServer localhost $PORT "GET-USERS-IN-ROOM user1 123 r1"
 
 echo Leave Room
 ./TestIRCServer localhost $PORT "LEAVE-ROOM user1 123 room2"
 ./TestIRCServer localhost $PORT "LEAVE-ROOM mary poppins room2"
 ./TestIRCServer localhost $PORT "LEAVE-ROOM ADMIN 123 room1"
-./TestIRCServer localhsot $PORT "LEAVE-ROOM ADMIN 123 room2"
+./TestIRCServer localhsot $PORT "LEAVE-ROOM ADMIN 123 r1"
 
 # Kill server
 echo Killing Server

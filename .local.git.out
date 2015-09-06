@@ -220,3 +220,7 @@
  delete mode 100755 .nfs0000000003249b91000000d0
  delete mode 100644 talk-server.out
  delete mode 100644 total.out
+[master 32dc250] 0 of 62
+ 4 files changed, 26 insertions(+), 16 deletions(-)
+ create mode 100644 total.out
+ rewrite total.txt (63%)
