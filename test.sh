@@ -47,6 +47,9 @@ echo Enter Room
 ./TestIRCServer localhost $PORT "ENTER-ROOM ADMIN 123 r1"
 ./TestIRCServer localhsot $PORT "ENTER-ROOM mary poppins r1"
 
+echo Print Users in rooms
+ 
+
 echo Leave Room
 ./TestIRCServer localhost $PORT "LEAVE-ROOM user1 123 room2"
 ./TestIRCServer localhost $PORT "LEAVE-ROOM mary poppins room2"

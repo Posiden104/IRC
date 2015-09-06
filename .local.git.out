@@ -210,3 +210,7 @@
 [master 9d0e024] Make IRCServer
  5 files changed, 5 insertions(+), 2 deletions(-)
  rename .nfs0000000003245620000000ce => .nfs000000000324610e000000cf (67%)
+[master efa8949] Make IRCServer
+ 6 files changed, 35 insertions(+), 44 deletions(-)
+ rename .nfs000000000324610e000000cf => .nfs0000000003249b91000000d0 (99%)
+ delete mode 100644 password.txt
